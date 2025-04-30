@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.ZeDoExter'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/public/'
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE // หรือ USE_FIRST
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    // ถ้าคุณมี resource ที่รวม plugin.yml ด้วย ให้ระวังจุดนี้:
+    from(sourceSets.main.output)
+}
+
